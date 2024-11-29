@@ -19,7 +19,11 @@
 Примеры вызова:
 
 `./lsr`
+
 `./lsr /etc`
+
 `./lsr --max-depth 2 /etc`
+
 `./lsr --max-depth 3 /etc`
+
 `./lsr --help`
