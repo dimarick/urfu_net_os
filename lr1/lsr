@@ -1,0 +1,69 @@
+#!/bin/bash
+
+show_help() {
+  echo "Программа рекурсивного отображения содержимого директории"
+  echo "lsr [OPTIONS] [DIRECTORY]"
+  echo "lsr --help"
+  echo "lsr --max-depth <n>, default n = 3"
+}
+
+repeat() {
+  STR=$1;
+  CURRENT_DEPTH=$2;
+  if (( CURRENT_DEPTH > 0 )); then
+    printf "${STR}%.0s" $(seq 1 ${CURRENT_DEPTH})
+  fi
+}
+
+show_file() {
+  NAME=$1
+  CURRENT_DEPTH=$2;
+  MAX_DEPTH=$3;
+
+  TYPE=`file --brief ${NAME}`
+  SIZE=`stat --format=%s ${NAME}`
+
+  repeat "\t" $((CURRENT_DEPTH - 1))
+  printf "${NAME}\t${SIZE}\t${TYPE}\n"
+
+  if [[ ${TYPE} == 'directory' ]]; then
+    cd ${NAME} || return
+    show_directory $((CURRENT_DEPTH + 1)) $((MAX_DEPTH - 1));
+  fi
+}
+
+
+show_directory() {
+  CURRENT_DEPTH=$1;
+  MAX_DEPTH=$2;
+
+  if [[ ${MAX_DEPTH} == 0 ]]; then
+    return
+  else
+      ls --human-readable --group-directories-first | xargs -n 1 -I '{}' bash -c "show_file '{}' $((CURRENT_DEPTH + 1)) $((MAX_DEPTH - 1))"
+  fi
+}
+
+export -f show_file
+export -f repeat
+export -f show_directory
+
+if [[ $1 == '--help' ]]; then
+  show_help;
+  exit 0
+fi
+
+if [[ $1 == '--max-depth' ]]; then
+  MAX_DEPTH=$2
+  shift 2
+fi
+
+if [[ ${MAX_DEPTH} == '' ]]; then
+  MAX_DEPTH=3
+fi
+
+if [[ $1 != '' ]]; then
+  cd $1 || exit $?
+fi
+
+show_directory 0 ${MAX_DEPTH};
