@@ -20,7 +20,6 @@ ssize_t writes(int sock, void *pbuf, size_t bufferSize) {
     return ((ssize_t) bufferSize - bytesToWrite);
 }
 
-/* считывание в буфер noc байт из сокета     */
 ssize_t reads(int sock, void *pbuf, size_t noc) {
     ssize_t bytesToRead, result;
 

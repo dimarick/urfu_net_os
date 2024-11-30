@@ -70,7 +70,6 @@ int main(void) {
 /* функция, реализующая специальную обработку IPC */
 int serverBind(void) {
     int sock;                    /* дескриптор сокета */
-    int nsock;                   /* дескриптор сокета */
     struct sockaddr_in server;   /* адрес сервера */
 /* создание сокета  */
     if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
