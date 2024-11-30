@@ -136,7 +136,7 @@ int main(int argc, char **argv)
             usleep(1);
             continue;
         } else {
-            printf("Bytes read %zu, but expected %zu in init loop. Thread %d\n", bytes, sizeof tmpResult, i);
+            printf("Bytes read %zu, but expected %zu in init loop. Thread %llu\n", bytes, sizeof tmpResult, thread);
             perror("Read failed");
             exit(3);
         }
