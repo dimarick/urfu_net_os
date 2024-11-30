@@ -32,7 +32,7 @@ int main(int argc, char **argv)
     }
 
     if (numThreads == 1) {
-        printf("%llu\n", squareSum(0, to - 1));
+        printf("%llu\n", squareSum(0, to));
         exit(0);
     }
 
@@ -109,9 +109,13 @@ int main(int argc, char **argv)
 
     unsigned long long result = 0;
 
-    for (int i = 0; i < to / batchSize; ++i) {
-        int thread = i % numThreads;
-        struct task t = {i * batchSize, (i + 1) * batchSize - 1};
+    for (unsigned long long i = 0, j = 0; i <= to; i += batchSize, j++) {
+        unsigned long long thread = j % numThreads;
+        struct task t = {i, i + batchSize - 1};
+        if (t.to > to) {
+            t.to = to;
+        }
+
         size_t bytes = write(pipesTask[thread][1], &t, sizeof t);
 
         if (bytes != sizeof t) {
@@ -129,12 +133,14 @@ int main(int argc, char **argv)
         } else if (bytes == 0) {
             continue;
         } else if (bytes == -1 && errno == EAGAIN) {
+            usleep(1);
             continue;
         } else {
             printf("Bytes read %zu, but expected %zu in init loop. Thread %d\n", bytes, sizeof tmpResult, i);
             perror("Read failed");
             exit(3);
         }
+
     }
 
     for (int i = 0; i < numThreads; ++i) {
