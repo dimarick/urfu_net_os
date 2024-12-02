@@ -1,4 +1,4 @@
-/*файл serveur.c                      ***************/
+/*файл server.c                      ***************/
 /*пpоцесс-сеpвеp   */
 #include <stdbool.h>
 #include <errno.h>

@@ -1,4 +1,4 @@
-#define _GNU_SOURCE
+#define _GNU_SOURCE // нужно для подключения функции pipe2
 #include <stdio.h>
 #include <fcntl.h>
 #include <string.h>

@@ -3,7 +3,7 @@ project(net_os)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 
 add_executable(lr2_daemon lr2/daemon.c)
 add_executable(lr3_ipc lr3/ipc.c)
